@@ -6,7 +6,8 @@ var gulp = require('gulp');             // 基础库
 
 // 引入gulp插件
 var //livereload = require('gulp-livereload'), // 网页自动刷新（服务器控制客户端同步刷新）
-    webserver = require('gulp-webserver'), // 本地服务器
+    webserver = require('gulp-webserver'), 
+// 本地服务器
     sass=require("gulp-ruby-sass"),   //sass编译插件
     uglify=require("gulp-uglify"),   //压缩js脚本
     rename=require("gulp-rename"),//引入min写法
@@ -30,7 +31,7 @@ gulp.task('html', function() {
 });
 //注册sass的任务
 gulp.task("sass",function () {
-    return sass("src/sass/*.scss",{style:"compact"})
+    return sass("src/sass/**/*.scss",{style:"compact"})
         .on("error",function (err) {
             console.log("编译sass出错",err.message)
         })
@@ -53,6 +54,16 @@ gulp.task("imagemin",function () {
             use:[pngquant]  //使用pngquant插件进行深度压缩
         }))
         .pipe(gulp.dest("dist/images"))  //输出路径
+});
+gulp.task('watch',function(){
+    // 监听 html
+    gulp.watch('src/**/*.html', ['html']);
+    // 监听 scss
+    gulp.watch('src/sass/*.scss', ['sass']);
+    // 监听 images
+    gulp.watch('src/images/**/*.{png,jpg,gif,svg}', ['imagemin']);
+    // 监听 js
+    gulp.watch('src/js/*.js', ['script']);
 });
 
 // 默认任务
